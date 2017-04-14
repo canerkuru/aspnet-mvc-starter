@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "Region";
+}
+
+<h2>Region</h2>
+
+
+<input type="button" id="btnGet" value="Get Data" onclick="loadData();" />
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">Add New Employee</button><br /><br />
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody class="tbody"></tbody>
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<button type="button" class="close" data-dissmiss="modal"><span aria-hidden="true">×</span></button>*@
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Add Employee</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="EmployeeId">ID</label>
+                        <input type="text" class="form-control" id="EmployeeID" placeholder="Id" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Name" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Update</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    function loadData() {
+        $.ajax({
+            url: "/Region/List",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.RegionID + '</td>';
+                    html += '<td>' + item.RegionDescription + '</td>';
+                    html += '<td><a href="#" onclick="return getbyID(' + item.RegionID + ')">Edit</a> | <a href="#" onclick="Delele(' + item.RegionID + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function Add() {
+        var res = validate();
+        //var res=true;
+        if (res == false) {
+            return false;
+        }
+        var empObj = {
+            RegionID: $('#EmployeeID').val(),
+            RegionDescription: $('#Name').val(),
+        };
+        $.ajax({
+            url: "/Region/Add",
+            data: JSON.stringify(empObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                loadData();
+                $('#myModal').modal('hide');
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function getbyID(EmpID) {
+        $('#Name').css('border-color', 'lightgrey');
+        $.ajax({
+            url: "/Region/getbyID/" + EmpID,
+            typr: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (result) {
+                $('#EmployeeID').val(result.RegionID);
+                $('#Name').val(result.RegionDescription);
+                $('#myModal').modal('show');
+                $('#btnUpdate').show();
+                $('#btnAdd').hide();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+
+    function Update() {
+        //var res = validate();
+        var res = true;
+        if (res == false) {
+            return false;
+        }
+        var empObj = {
+            RegionID: $('#EmployeeID').val(),
+            RegionDescription: $('#Name').val(),
+        };
+        $.ajax({
+            url: "/Region/Update",
+            data: JSON.stringify(empObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                loadData();
+                $('#myModal').modal('hide');
+                $('#EmployeeID').val("");
+                $('#Name').val("");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+
+    function clearTextBox() {
+        $('#EmployeeID').val("");
+        $('#Name').val("");
+    }
+
+    function validate() {
+        var isValid = true;
+        if ($('#Name').val().trim() == "") {
+            $('#Name').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#Name').css('border-color', 'lightgrey');
+        }
+        if ($('#EmployeeID').val().trim() == "") {
+            $('#EmployeeID').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#EmployeeID').css('border-color', 'lightgrey');
+        }
+        return isValid;
+    }
+
+
+
+</script>

@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Weather";
+}
+
+<h2>Yahoo Weather</h2>
+
+
+    <table class="table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Day</th>
+                <th>High</th>
+                <th>Text</th>
+            </tr>
+        </thead>        
+        <tbody id="bodyCal">            
+        </tbody>
+    </table>
+
+    
+
+<script>
+
+    var forecast; 
+    var tbody = '';
+
+    var callbackFunction = function (data) {
+        forecast = data.query.results.channel.item.forecast;
+        $.each(forecast, function (key, value) {
+            console.log(value.text + value.date);
+
+            tbody += "<tr> <td>" + value.date + " </td> \
+                <td>" + value.day + "</td> \
+                <td>" + value.high + "</td> \
+                <td>" + value.text + "</td> \
+            </tr>";
+
+        });
+        $('#bodyCal').html(tbody);
+    };
+    
+
+</script>
+
+<script src="https://query.yahooapis.com/v1/public/yql?q=select item from weather.forecast where woeid in (select woeid from geo.places(1) where text='istanbul') and u='C'&format=json&callback=callbackFunction"></script>
+
+
+

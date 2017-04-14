@@ -1,0 +1,55 @@
+﻿@model aspnet_mvc_starter.Models.User
+
+
+@{
+    ViewBag.Title = "Session Form";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Index", "AppSession", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">UserName:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" , @placeholder = "Enter Username" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="pwd">Password:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.UserPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter UserPassword" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Email:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.UserEMail, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter UserEMail" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">FirstName:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter FirstName" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">LastName:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter LastName" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Title:</label>
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.UserTitle, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter UserTitle" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "IndexjQuery";
+}
+
+<h2>IndexjQuery</h2>
+
+<input type="button" id="myButton" value="click button" />
+
+
+<div><a href="#" class="get_weather">Get weather</a></div>
+<div id="result" style="display: none">
+    <div id="icon"></div>
+    <div id="city"><strong></strong></div>
+    <div id="weather"></div>
+    <div id="time"></div>
+    <div><a href="#" class="hide">Hide</a></div>
+</div>
+
+<br />
+<p>load the contents of myfile.txt into #myDiv</p>
+<div id="myDiv">
+</div>
+<br /><hr />
+
+<div id="slideMe">
+    This content will appear and disappear when the div is slid in and out.
+    <p>test slide</p>
+</div>
+<!-- One button for each slide command -->
+<input type="button" id="btnSlideUp" value="Slide Up">
+<input type="button" id="btnSlideDown" value="Slide Down">
+<input type="button" id="btnSlideToggle" value="Slide Toggle">
+
+<br />
+<hr />
+
+<div id="fadeMe">
+    This content will appear and disappear when the div is faded in and out.
+</div>
+<!-- One button for each fading command -->
+<input type="button" id="btnFadeOut" value="Fade Out">
+<input type="button" id="btnFadeIn" value="Fade In">
+
+<br />
+<hr />
+
+
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        function getWeather() {
+            $.ajax('http://api.wunderground.com/api/c6dc8e785d943109/conditions/q/AZ/Chandler.json', {
+                dataType: 'jsonp',
+                success: function (json) {
+                    $('div#city strong').text(json.current_observation.display_location.full)
+                    $('div#icon').html('<img src=' + json.current_observation.icon_url + '>')
+                    $('div#weather').text(json.current_observation.temperature_string + " " + json.current_observation.weather);
+                    $('div#time').text(json.current_observation.observation_time_rfc822);
+                }
+            });
+        }
+        $('a.get_weather').click(function (e) {
+            e.preventDefault();
+            //$(this).hide();
+            getWeather();
+            $('#result').fadeIn(1000);
+        });
+        $('a.hide').click(function (e) {
+            e.preventDefault();
+            $('#result').hide();
+            $('a.get_weather').show();
+        })
+    })
+</script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#myButton").click(function () {
+                alert("button clicked.");
+            });
+        });
+
+        $('#myDiv').load('/Content/myfile.txt');
+
+        $('#btnSlideUp').click(function () {
+            $('#slideMe').slideUp('slow');
+        });
+        $('#btnSlideDown').click(function () {
+            $('#slideMe').slideUp();
+        });
+        $('#btnSlideToggle').click(function () {
+            $('#slideMe').slideToggle('fast');
+        });
+
+        $('#btnFadeIn').click(function () {
+            $('#fadeMe').fadeIn('slow');
+        });
+        $('#btnFadeOut').click(function () {
+            $('#fadeMe').fadeOut();
+        });
+
+     
+
+    </script>
+
+<input type="text" id="txtName" />
+<input type="button" id="btnGet" value="Get Current Time (AJAX)" />
+
+<script type="text/javascript">
+        $(function () {
+            $("#btnGet").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/AppBasic/AjaxMethod",
+                    data: '{name: "' + $("#txtName").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+</script>
+
+
+
+
+

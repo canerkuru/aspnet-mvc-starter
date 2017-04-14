@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Basic";
+}
+
+
+@{ var firstNumber = 1; var msg1="";}
+
+@{
+    var secondNumber = 2;
+    var total = firstNumber + secondNumber;
+}
+
+
+<h2>@ViewData["Message"]</h2>
+
+<hr />
+
+<p>Temp Data : @TempData["value"]</p>
+
+<hr />
+
+<p>The total count is @total</p>
+
+@for (int i = 0; i < total; i++)
+{
+    @:<p>Hello, I am a p @i !</p>
+}
+
+@if (total > 3)
+{
+    msg1 = "The total is greater than 3";
+}
+else
+{
+    msg1 = "The total is less than 3";
+}
+
+<p>@msg1</p>
+
+<hr />
+
+@functions
+{
+    string GetCssClass(string status)
+    {
+        switch (status)
+        {
+            case "Success":
+                return "alert-success";
+            case "Info":
+                return "alert-info";
+            case "Warning":
+                return "alert-warning";
+            case "Danger":
+            default:
+                return "alert-danger";
+        }
+    }
+}
+
+<label class="alert @GetCssClass("Info")">Sample Class Text</label>
+
+<hr />
+
+<ul>
+    @foreach (var student in ViewBag.Student)
+    { 
+    <li>@student</li>
+     } 
+</ul>
